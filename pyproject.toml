@@ -26,7 +26,6 @@ packages = [
 [tool.poetry.dependencies]
 python = "3.8.1"
 click = "*"
-requests = "^2.24.0"
 
 [tool.poetry.dev-dependencies]
 bumpversion = "*"
