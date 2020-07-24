@@ -1,6 +1,8 @@
 """Main module."""
 from pathlib import Path
 
+import click
+
 
 class Topojoin:
     def __init__(self, csv_path, topo_path):
@@ -39,10 +41,12 @@ class Topojoin:
         self._topo_path = Path(d)
 
     def hello(self):
-        print(f"csv_path is {self.csv_path}")
-        print(isinstance(self.csv_path, str))
+        click.echo(f"csv_path is {self.csv_path}")
+        click.echo(f"topo_path is {self.topo_path}")
 
 
-topo = Topojoin("../pa-county-pop.csv", "../pa-county.json")
+topo = Topojoin(
+    "../tests/fixtures/pa-county-pop.csv", "../tests/fixtures/pa-county.json"
+)
 # topo = Topojoin("../pa-county.json","../pa-county.json")
 topo.hello()
