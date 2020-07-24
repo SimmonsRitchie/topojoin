@@ -17,11 +17,9 @@ class Topojoin:
     def csv_path(self, d):
         p = Path(d)
         if not p.exists():
-            raise Exception("csv_path must specify a valid file")
+            raise Exception(f"csv_path must specify a file")
         if p.suffix.lower() not in [".csv"]:
-            raise Exception(
-                f"csv_path has extension {p.suffix}. csv_path must be a CSV file"
-            )
+            raise Exception(f"csv_path must have .csv extension")
         self._csv_path = Path(d)
 
     @property
@@ -32,21 +30,14 @@ class Topojoin:
     def topo_path(self, d):
         p = Path(d)
         if not p.exists():
-            raise Exception("topo_path must specify a valid file")
+            raise Exception(f"topo_path must specify a file.")
         if p.suffix.lower() not in [".json", ".topojson", ".geojson"]:
             print(p.suffix)
             raise Exception(
-                f"topo_path has extension {p.suffix}. topo_path must be a CSV file"
+                f"topo_path must have .json .topojson or .geojson extension"
             )
         self._topo_path = Path(d)
 
     def hello(self):
         click.echo(f"csv_path is {self.csv_path}")
         click.echo(f"topo_path is {self.topo_path}")
-
-
-topo = Topojoin(
-    "../tests/fixtures/pa-county-pop.csv", "../tests/fixtures/pa-county.json"
-)
-# topo = Topojoin("../pa-county.json","../pa-county.json")
-topo.hello()

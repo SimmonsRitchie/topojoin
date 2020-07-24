@@ -6,7 +6,7 @@ from topojoin.topojoin import Topojoin
 
 
 @click.command()
-@click.argument("csv_path", type=click.Path(exists=True))
+@click.argument("csv_path", type=click.STRING)
 @click.argument("topo_path", type=click.STRING)
 @click.option("--csvkey", "-ck", default="fips", type=click.STRING)
 @click.option("--topokey", "-tk", default="fips", type=click.STRING)
