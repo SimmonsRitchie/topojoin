@@ -1,7 +1,7 @@
 [tool]
 [tool.poetry]
 name = "topojoin"
-version = "0.1.0"
+version = "0.1.1"
 homepage = "https://github.com/SimmonsRitchie/topojoin"
 description = "Top-level package for TopoJoin."
 authors = ["DSR <info@simmonsritchie.com>"]
@@ -24,7 +24,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "3.8.1"
+python = "3.7"
 click = "*"
 
 [tool.poetry.dev-dependencies]
