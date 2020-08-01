@@ -7,24 +7,11 @@ from click.testing import CliRunner
 from pathlib import Path
 from topojoin import cli
 
-root = Path(__file__).parent.resolve()
-
-
-@pytest.fixture
-def csv_path():
-    return str(root / "fixtures/pa-county-pop.csv")
-
-
-@pytest.fixture
-def topo_path():
-    return str(root / "fixtures/pa-county.json")
-
 
 def test_cli(csv_path, topo_path):
     runner = CliRunner()
     result = runner.invoke(cli.main, [csv_path, topo_path])
-    print(result.exc_info)
-    print(result.exception)
+    print(result.output)
     assert result.exit_code == 0
 
 
