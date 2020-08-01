@@ -1,9 +1,9 @@
 """Main module."""
 from pathlib import Path
-
+from typing import List
 import click
 
-from topojoin.helper import read_csv
+from topojoin.helper import read_csv, read_topo
 
 
 class TopoJoin:
@@ -11,6 +11,8 @@ class TopoJoin:
         self.csv_path = csv_path
         self.topo_path = topo_path
         self.csv_data = read_csv(csv_path)
+        self.topo_data = read_topo(topo_path)
+        self.topo_keys = self.get_topo_keys()
 
     @property
     def csv_path(self):
@@ -41,6 +43,11 @@ class TopoJoin:
             )
         self._topo_path = Path(d)
 
-    def hello(self):
-        click.echo(f"csv_path is {self.csv_path}")
-        click.echo(f"topo_path is {self.topo_path}")
+    def get_topo_keys(self) -> List[str]:
+        """
+        Gets a list of properties in the first feature of topojson data
+        """
+        objects = self.topo_data["objects"]
+        first_key = list(objects.keys())[0]
+        properties = objects[first_key]["geometries"][0]["properties"]
+        return list(properties)

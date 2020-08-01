@@ -15,7 +15,9 @@ def main(csv_path: str, topo_path: str, csvkey: str, topokey: str):
     click.echo("Starting topojoin...")
     click.echo(csv_path)
     topojoin_obj = TopoJoin(csv_path, topo_path)
-    print(topojoin_obj.csv_data)
+    click.echo(topojoin_obj.csv_data)
+    click.echo(topojoin_obj.topo_data)
+    click.echo(topojoin_obj.topo_keys)
     return 0
 
 
