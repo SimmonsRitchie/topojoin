@@ -12,19 +12,19 @@ from topojoin.topojoin import TopoJoin
 @click.option(
     "csv_key",
     "--csvkey",
-    "-c",
+    "-ck",
     default="fips",
     type=click.STRING,
-    help="Key in CSV file that will be used to join " "with topojson file",
+    help="Key in CSV file that will be used to join with topojson file",
     show_default=True,
 )
 @click.option(
     "topo_key",
     "--topokey",
-    "-t",
+    "-tk",
     default="fips",
     type=click.STRING,
-    help="Key in CSV file that will be used to " "join with CSV file",
+    help="Key in CSV file that will be used to join with CSV file",
     show_default=True,
 )
 @click.option(
@@ -36,19 +36,27 @@ from topojoin.topojoin import TopoJoin
     help="Disables stdout during program run",
 )
 @click.version_option()
-def main(quiet, **kwargs):
-    """Console script for topojoin."""
+def main(quiet: bool, csv_path, topo_path, **kwargs) -> None:
+    """
+    CLI for topojoin.
+
+    Args:
+        quiet (bool): Disables stdout during program run.
+        csv_path (str):
+        topo_path (str):
+        kwargs (dict): Keyword arguments that will be passed to TopoJson.
+
+    Returns:
+        None
+    """
     if quiet:
         f = open(os.devnull, "w")
         sys.stdout = f
 
     click.echo("Starting topojoin...")
-    click.echo(kwargs)
-    topojoin_obj = TopoJoin(**kwargs)
-    # click.echo(topojoin_obj.csv_data)
-    # click.echo(topojoin_obj.topo_data)
-    # click.echo(topojoin_obj.topo_keys)
-    # click.echo(topojoin_obj.csv_keys)
+    topojoin_obj = TopoJoin(csv_path, topo_path, **kwargs)
+    click.echo(topojoin_obj.topo_path)
+
     return 0
 
 
