@@ -8,7 +8,7 @@ from pathlib import Path
 from topojoin import cli
 
 
-def test_cli(csv_path, topo_path):
+def test_cli_no_opts(csv_path, topo_path):
     runner = CliRunner()
     result = runner.invoke(cli.main, [csv_path, topo_path])
     print(result.output)
@@ -21,3 +21,6 @@ def test_cli_help():
     help_result = runner.invoke(cli.main, ["--help"])
     assert help_result.exit_code == 0
     assert "--help  Show this message and exit." in help_result.output
+
+
+# def test_
