@@ -2,7 +2,7 @@
 import sys
 import click
 
-from topojoin.topojoin import Topojoin
+from topojoin.topojoin import TopoJoin
 
 
 @click.command()
@@ -14,8 +14,8 @@ def main(csv_path: str, topo_path: str, csvkey: str, topokey: str):
     """Console script for topojoin."""
     click.echo("Starting topojoin...")
     click.echo(csv_path)
-    topojoin_obj = Topojoin(csv_path, topo_path)
-    topojoin_obj.hello()
+    topojoin_obj = TopoJoin(csv_path, topo_path)
+    print(topojoin_obj.csv_data)
     return 0
 
 

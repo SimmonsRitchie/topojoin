@@ -3,11 +3,14 @@ from pathlib import Path
 
 import click
 
+from topojoin.helper import read_csv
 
-class Topojoin:
+
+class TopoJoin:
     def __init__(self, csv_path, topo_path):
         self.csv_path = csv_path
         self.topo_path = topo_path
+        self.csv_data = read_csv(csv_path)
 
     @property
     def csv_path(self):
