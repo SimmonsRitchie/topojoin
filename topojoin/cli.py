@@ -52,9 +52,14 @@ def main(quiet: bool, csv_path, topo_path, **kwargs) -> None:
     if quiet:
         f = open(os.devnull, "w")
         sys.stdout = f
-
-    click.echo("Starting topojoin...")
     topojoin_obj = TopoJoin(csv_path, topo_path, **kwargs)
+    click.echo(
+        f"Joining {topojoin_obj.csv_filename} to {topojoin_obj.topo_filename})..."
+    )
+    click.echo(
+        f"CSV key '{topojoin_obj.csv_key}' will be joined with topojson key '{topojoin_obj.topo_key}'"
+    )
+
     click.echo(topojoin_obj.topo_path)
 
     return 0
