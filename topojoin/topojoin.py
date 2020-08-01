@@ -2,7 +2,7 @@
 from pathlib import Path
 from typing import List, Union
 import operator
-from topojoin.helper import read_csv, read_topo
+from topojoin.helper import read_csv, read_topo, get_topo_keys
 
 
 class TopoJoin:
@@ -15,12 +15,12 @@ class TopoJoin:
         topo_key: str,
     ):
         self.csv_path = csv_path
-        self.topo_path = topo_path
         self.csv_data = read_csv(csv_path)
         self.csv_keys = list(self.csv_data[0])
-        self.topo_data = read_topo(topo_path)
-        self.topo_keys = self.get_topo_keys()
         self.csv_key = csv_key
+        self.topo_path = topo_path
+        self.topo_data = read_topo(topo_path)
+        self.topo_keys = get_topo_keys(self.topo_data)
         self.topo_key = topo_key
 
     @property
@@ -36,6 +36,10 @@ class TopoJoin:
             raise Exception(f"File doesn't exist at path '{new_csv_path}'.")
 
     @property
+    def csv_filename(self) -> str:
+        return self.csv_path.name
+
+    @property
     def topo_path(self) -> Path:
         return self._topo_path
 
@@ -46,6 +50,10 @@ class TopoJoin:
             self._topo_path = new_topo_path
         else:
             raise Exception(f"File doesn't exist at path '{new_topo_path}'.")
+
+    @property
+    def topo_filename(self) -> str:
+        return self.topo_path.name
 
     @property
     def csv_key(self) -> str:
@@ -72,12 +80,3 @@ class TopoJoin:
             raise Exception(
                 f"Provided topo_key '{new_topo_key}' is not among TopoJson keys: {self.topo_keys}."
             )
-
-    def get_topo_keys(self) -> List[str]:
-        """
-        Gets a list of properties in the first feature of topojson data
-        """
-        objects = self.topo_data["objects"]
-        first_key = list(objects.keys())[0]
-        properties = objects[first_key]["geometries"][0]["properties"]
-        return list(properties)

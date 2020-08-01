@@ -1,7 +1,7 @@
 import csv
 import json
 from pathlib import Path
-from typing import Union, List
+from typing import Union, List, Dict
 from collections import OrderedDict
 
 
@@ -32,3 +32,19 @@ def read_topo(topo_path):
     """
     data = open(topo_path)
     return json.load(data)
+
+
+def get_topo_keys(topo_data: Dict) -> List[str]:
+    """
+    Gets a list of properties in the first feature of topojson data
+
+    Args:
+        topo_data (Dict): Dictionary of topojson data.
+
+    Returns:
+        List[str]: Properties in the first feature of topojson data
+    """
+    objects = topo_data["objects"]
+    first_key = list(objects.keys())[0]
+    properties = objects[first_key]["geometries"][0]["properties"]
+    return list(properties)
