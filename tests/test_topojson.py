@@ -17,11 +17,10 @@ def test_topojson_init(topo_path, csv_path):
 
 def test_topojson_with_relative_paths(topo_path, csv_path, tmp_path):
     output_path = tmp_path / "test_joined.json"
+    relative_topo_path = Path(topo_path).relative_to(Path.cwd())
+    relative_csv_path = Path(csv_path).relative_to(Path.cwd())
     topojoin_obj = TopoJoin(
-        "./fixtures/pa-county.json",
-        "./fixtures/pa-county-pop.csv",
-        topo_key="GEOID",
-        csv_key="fips",
+        relative_topo_path, relative_csv_path, topo_key="GEOID", csv_key="fips",
     )
     topojoin_obj.join(output_path)
     file_list = tmp_path.glob("**/*")
