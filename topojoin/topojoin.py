@@ -10,6 +10,7 @@ from topojoin.helper import (
     write_topo,
     get_topo_features,
 )
+import click
 
 
 class TopoJoin:
@@ -118,19 +119,20 @@ class TopoJoin:
         joined_topo_data = copy.deepcopy(self.topo_data)
         csv_lookup_table = create_lookup_table(self.csv_data, self.csv_key)
         features = get_topo_features(joined_topo_data)
-        for feature in features:
-            topo_props = feature["properties"]
-            topo_join_val = topo_props[self.topo_key]
-            csv_row = csv_lookup_table.get(topo_join_val)
-            if csv_row:
-                csv_row = {k: v for k, v in csv_row.items() if k in csv_props}  # filter keys
-                new_props = {**topo_props, **csv_row}
-            else:
-                clean_csv_keys = copy.deepcopy(self.all_csv_props)
-                clean_csv_keys.remove(self.csv_key)
-                null_fields = {x: None for x in clean_csv_keys}
-                new_props = {**topo_props, **null_fields}
-            feature["properties"] = new_props
+        with click.progressbar(features) as bar:
+            for feature in bar:
+                topo_props = feature["properties"]
+                topo_join_val = topo_props[self.topo_key]
+                csv_row = csv_lookup_table.get(topo_join_val)
+                if csv_row:
+                    csv_row = {k: v for k, v in csv_row.items() if k in csv_props}  # filter keys
+                    new_props = {**topo_props, **csv_row}
+                else:
+                    clean_csv_keys = copy.deepcopy(self.all_csv_props)
+                    clean_csv_keys.remove(self.csv_key)
+                    null_fields = {x: None for x in clean_csv_keys}
+                    new_props = {**topo_props, **null_fields}
+                feature["properties"] = new_props
         if output_path:
             write_topo(joined_topo_data, output_path)
         return joined_topo_data
