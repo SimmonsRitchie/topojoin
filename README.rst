@@ -36,7 +36,7 @@ Command line
 
 In the command line, enter the topojoin command followed by the path to your topojson file and your CSV file.
 
-By default topojoin will assume both files have a common field called 'id' that can be joined.
+By default TopoJoin will assume both files have a common field called 'id' that can be joined.
 
 ::
 
@@ -61,7 +61,7 @@ your CSV file:
 Programmatic
 ============
 
-If you prefer, you can also import and call topojson from a python script:
+If you prefer, you can also import and call TopoJoin from a python script:
 
 
 ::
@@ -88,7 +88,7 @@ Advanced usage
 Command line
 ================
 
-topojoin's actions can be modified in a number of ways by passing optional arguments. Here are its available options:
+TopoJoin's actions can be modified in a number of ways by passing optional arguments. Here are its available options:
 
   -tk, --topokey TEXT     Key in CSV file that will be used to join with CSV
                           file  [default: id]
