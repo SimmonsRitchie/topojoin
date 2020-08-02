@@ -1,7 +1,4 @@
-import json
-
 import pytest
-
 from topojoin.helper import read_csv, read_topo
 
 
