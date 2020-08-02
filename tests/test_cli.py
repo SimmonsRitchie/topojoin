@@ -8,11 +8,17 @@ from pathlib import Path
 from topojoin import cli
 
 
-def test_cli_basic(csv_path, topo_path):
+def test_cli_basic(csv_path, topo_path, tmp_path):
+    output_path = tmp_path / "test_joined.json"
     runner = CliRunner()
-    result = runner.invoke(cli.main, ["-tk", "GEOID", csv_path, topo_path])
+    result = runner.invoke(
+        cli.main, ["-tk", "GEOID", "-o", output_path, csv_path, topo_path]
+    )
     print(result.output)
     assert result.exit_code == 0
+    file_list = tmp_path.glob("**/*")
+    file_list = [x for x in file_list if x.is_file()]
+    assert len(file_list) == 1
 
 
 def test_cli_invalid_topo_path(csv_path):

@@ -68,8 +68,8 @@ def main(quiet: bool, csv_path, topo_path, **kwargs) -> None:
     click.echo(
         f"CSV key '{topojoin_obj.csv_key}' will be joined with topojson key '{topojoin_obj.topo_key}'"
     )
-
-    click.echo(topojoin_obj.topo_path)
+    topojoin_obj.join()
+    click.echo(f"File saved as: {topojoin_obj.output_path}")
 
     return 0
 
