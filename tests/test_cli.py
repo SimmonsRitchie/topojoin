@@ -6,14 +6,18 @@ import pytest
 from click.testing import CliRunner
 from pathlib import Path
 from topojoin import cli
+import os
 
 
 def test_cli_basic(topo_path, csv_path, tmp_path):
     output_path = tmp_path / "test_joined.json"
     runner = CliRunner()
     result = runner.invoke(
-        cli.main, ["-tk", "GEOID", "-o", output_path, topo_path, csv_path]
+        cli.main,
+        ["-tk", "GEOID", "-ck", "fips", "-o", output_path, topo_path, csv_path,],
     )
+    print(result.exception)
+    print(result.exc_info)
     print(result.output)
     assert result.exit_code == 0
     file_list = tmp_path.glob("**/*")
