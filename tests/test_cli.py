@@ -4,9 +4,7 @@
 
 import pytest
 from click.testing import CliRunner
-from pathlib import Path
 from topojoin import cli
-import os
 
 
 def test_cli_basic(topo_path, csv_path, tmp_path):

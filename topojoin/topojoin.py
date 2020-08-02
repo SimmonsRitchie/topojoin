@@ -2,7 +2,6 @@
 import copy
 from pathlib import Path
 from typing import List, Union, Dict, Any
-import operator
 from topojoin.helper import (
     read_csv,
     read_topo,
@@ -11,7 +10,6 @@ from topojoin.helper import (
     write_topo,
     get_topo_features,
 )
-import os
 
 
 class TopoJoin:
@@ -20,9 +18,16 @@ class TopoJoin:
         topo_path: Union[str, Path],
         csv_path: Union[str, Path],
         *,
-        csv_key: str = "id",
         topo_key: str = "id",
+        csv_key: str = "id",
     ):
+        """
+            Args:
+                topo_path (Union[str, Path]): Path to topojson file
+                csv_path (Union[str, Path]): Path to CSV file
+                csv_key (str, optional): Field on CSV field that will be used for join. Defaults to 'id'.
+                topo_key (str, optional):  Field on topojson file that will be used for join. Defaults to 'id'.
+        """
         self.topo_path = topo_path
         self.topo_data = read_topo(topo_path)
         self.topo_keys = get_topo_keys(self.topo_data)
