@@ -7,17 +7,8 @@ from topojoin.topojoin import TopoJoin
 
 
 @click.command()
-@click.argument("csv_path", type=click.Path())
 @click.argument("topo_path", type=click.Path())
-@click.option(
-    "csv_key",
-    "--csvkey",
-    "-ck",
-    default="fips",
-    type=click.STRING,
-    help="Key in CSV file that will be used to join with topojson file",
-    show_default=True,
-)
+@click.argument("csv_path", type=click.Path())
 @click.option(
     "topo_key",
     "--topokey",
@@ -25,6 +16,15 @@ from topojoin.topojoin import TopoJoin
     default="fips",
     type=click.STRING,
     help="Key in CSV file that will be used to join with CSV file",
+    show_default=True,
+)
+@click.option(
+    "csv_key",
+    "--csvkey",
+    "-ck",
+    default="fips",
+    type=click.STRING,
+    help="Key in CSV file that will be used to join with topojson file",
     show_default=True,
 )
 @click.option(

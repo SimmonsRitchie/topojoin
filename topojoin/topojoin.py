@@ -17,49 +17,20 @@ import os
 class TopoJoin:
     def __init__(
         self,
-        csv_path: Union[str, Path],
         topo_path: Union[str, Path],
+        csv_path: Union[str, Path],
         *,
         csv_key: str,
         topo_key: str,
     ):
-        self.csv_path = csv_path
-        self.csv_data = read_csv(csv_path)
-        self.csv_keys = list(self.csv_data[0])
-        self.csv_key = csv_key
         self.topo_path = topo_path
         self.topo_data = read_topo(topo_path)
         self.topo_keys = get_topo_keys(self.topo_data)
         self.topo_key = topo_key
-
-    @property
-    def csv_path(self) -> Path:
-        return self._csv_path
-
-    @csv_path.setter
-    def csv_path(self, new_csv_path: Union[str, Path]) -> None:
-        new_csv_path = Path(new_csv_path)
-        if new_csv_path.exists():
-            self._csv_path = new_csv_path
-        else:
-            raise Exception(f"File doesn't exist at path '{new_csv_path}'.")
-
-    @property
-    def csv_filename(self) -> str:
-        return self.csv_path.name
-
-    @property
-    def csv_key(self) -> str:
-        return self._csv_key
-
-    @csv_key.setter
-    def csv_key(self, new_csv_key: str) -> None:
-        if new_csv_key in self.csv_keys:
-            self._csv_key = new_csv_key
-        else:
-            raise Exception(
-                f"Provided csv_key '{new_csv_key}' is not among CSV keys: {self.csv_keys}."
-            )
+        self.csv_path = csv_path
+        self.csv_data = read_csv(csv_path)
+        self.csv_keys = list(self.csv_data[0])
+        self.csv_key = csv_key
 
     @property
     def topo_path(self) -> Path:
@@ -88,6 +59,35 @@ class TopoJoin:
         else:
             raise Exception(
                 f"Provided topo_key '{new_topo_key}' is not among TopoJson keys: {self.topo_keys}."
+            )
+
+    @property
+    def csv_path(self) -> Path:
+        return self._csv_path
+
+    @csv_path.setter
+    def csv_path(self, new_csv_path: Union[str, Path]) -> None:
+        new_csv_path = Path(new_csv_path)
+        if new_csv_path.exists():
+            self._csv_path = new_csv_path
+        else:
+            raise Exception(f"File doesn't exist at path '{new_csv_path}'.")
+
+    @property
+    def csv_filename(self) -> str:
+        return self.csv_path.name
+
+    @property
+    def csv_key(self) -> str:
+        return self._csv_key
+
+    @csv_key.setter
+    def csv_key(self, new_csv_key: str) -> None:
+        if new_csv_key in self.csv_keys:
+            self._csv_key = new_csv_key
+        else:
+            raise Exception(
+                f"Provided csv_key '{new_csv_key}' is not among CSV keys: {self.csv_keys}."
             )
 
     def join(self, output_path: Union[str, Path] = None,) -> Dict[str, Any]:
