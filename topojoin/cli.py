@@ -39,6 +39,16 @@ from typing import Union, Dict, Any
     show_default=True,
 )
 @click.option(
+    "output_path",
+    "--output_path",
+    "-o",
+    # callback=lambda ctx, param, value: Path(os.getcwd()) / value,
+    default=Path(os.getcwd()) / "joined.json",
+    type=click.Path(resolve_path=True),
+    help="Key in CSV file that will be used to join with CSV file",
+    show_default=True,
+)
+@click.option(
     "quiet",
     "--quiet",
     "-q",
