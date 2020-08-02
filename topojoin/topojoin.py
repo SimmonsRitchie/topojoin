@@ -20,8 +20,8 @@ class TopoJoin:
         topo_path: Union[str, Path],
         csv_path: Union[str, Path],
         *,
-        csv_key: str,
-        topo_key: str,
+        csv_key: str = "id",
+        topo_key: str = "id",
     ):
         self.topo_path = topo_path
         self.topo_data = read_topo(topo_path)

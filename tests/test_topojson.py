@@ -15,6 +15,22 @@ def test_topojson_init(topo_path, csv_path):
     print(topojoin_obj.topo_key)
 
 
+def test_topojson_with_relative_paths(topo_path, csv_path, tmp_path):
+    output_path = tmp_path / "test_joined.json"
+    topojoin_obj = TopoJoin(
+        "./fixtures/pa-county.json",
+        "./fixtures/pa-county-pop.csv",
+        topo_key="GEOID",
+        csv_key="fips",
+    )
+    topojoin_obj.join(output_path)
+    file_list = tmp_path.glob("**/*")
+    file_list = [x for x in file_list if x.is_file()]
+    assert len(file_list) == 1
+    assert topojoin_obj.topo_path.absolute() == Path(topo_path).absolute()
+    assert topojoin_obj.csv_path.absolute() == Path(csv_path).absolute()
+
+
 def test_error_when_csv_key_not_present(topo_path, csv_path):
     """ Test failure when topo_key is not among keys in CSV file """
     with pytest.raises(Exception):
