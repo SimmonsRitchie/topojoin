@@ -1,8 +1,9 @@
 import csv
 import json
 from pathlib import Path
-from typing import Union, List, Dict
+from typing import Union, List, Dict, Any
 from collections import OrderedDict
+import copy
 
 
 def read_csv(csv_path: Union[Path, str]) -> "List[OrderedDict[str, str]]":
@@ -34,6 +35,11 @@ def read_topo(topo_path):
     return json.load(data)
 
 
+def write_topo(topo_data, output_path) -> None:
+    with open(output_path, "w") as outfile:
+        json.dump(topo_data, outfile)
+
+
 def get_topo_keys(topo_data: Dict) -> List[str]:
     """
     Gets a list of properties in the first feature of topojson data
@@ -48,3 +54,17 @@ def get_topo_keys(topo_data: Dict) -> List[str]:
     first_key = list(objects.keys())[0]
     properties = objects[first_key]["geometries"][0]["properties"]
     return list(properties)
+
+
+def create_lookup_table(
+    list_of_dicts: List[Dict[str, Any]], lookup_key
+) -> Dict[str, List[Any]]:
+    """ Takes a list of dictionaries and converts it into a dictionary of dictionaries indexed by a specified key"""
+
+    payload = {}
+    for dict_item in list_of_dicts:
+        payload_index = dict_item[lookup_key]
+        dict_item = copy.deepcopy(dict_item)
+        dict_item.pop(lookup_key)
+        payload[payload_index] = dict_item
+    return payload
