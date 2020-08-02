@@ -8,11 +8,11 @@ from pathlib import Path
 from topojoin import cli
 
 
-def test_cli_basic(csv_path, topo_path, tmp_path):
+def test_cli_basic(topo_path, csv_path, tmp_path):
     output_path = tmp_path / "test_joined.json"
     runner = CliRunner()
     result = runner.invoke(
-        cli.main, ["-tk", "GEOID", "-o", output_path, csv_path, topo_path]
+        cli.main, ["-tk", "GEOID", "-o", output_path, topo_path, csv_path]
     )
     print(result.output)
     assert result.exit_code == 0
@@ -24,14 +24,14 @@ def test_cli_basic(csv_path, topo_path, tmp_path):
 def test_cli_invalid_topo_path(csv_path):
     """ Test exception raised if topojson file doesn't exist"""
     runner = CliRunner()
-    result = runner.invoke(cli.main, [csv_path, "./fixtures/pa-county.txt"])
+    result = runner.invoke(cli.main, ["./fixtures/pa-county.txt", csv_path])
     print(result.exc_info)
     assert result.exit_code != 0
 
 
 def test_cli_invalid_csv_path(topo_path):
     runner = CliRunner()
-    result = runner.invoke(cli.main, ["./fixtures/foobar.csv", topo_path])
+    result = runner.invoke(cli.main, [topo_path, "./fixtures/foobar.csv"])
     print(result.exc_info)
     assert result.exit_code != 0
 
@@ -51,9 +51,9 @@ def test_cli_version():
     assert "version" in result.output
 
 
-def test_cli_quiet(csv_path, topo_path):
+def test_cli_quiet(topo_path, csv_path):
     """ Test no console output """
     runner = CliRunner()
-    result = runner.invoke(cli.main, ["--quiet", csv_path, topo_path])
+    result = runner.invoke(cli.main, ["--quiet", topo_path, csv_path])
     print(result.output)
     assert result.output == ""
