@@ -1,8 +1,16 @@
 """Main module."""
+import copy
 from pathlib import Path
 from typing import List, Union
 import operator
-from topojoin.helper import read_csv, read_topo, get_topo_keys
+from topojoin.helper import (
+    read_csv,
+    read_topo,
+    get_topo_keys,
+    create_lookup_table,
+    write_topo,
+)
+import os
 
 
 class TopoJoin:
@@ -13,6 +21,7 @@ class TopoJoin:
         *,
         csv_key: str,
         topo_key: str,
+        output_path: Union[str, Path] = Path(os.getcwd()) / "joined.json",
     ):
         self.csv_path = csv_path
         self.csv_data = read_csv(csv_path)
@@ -22,6 +31,7 @@ class TopoJoin:
         self.topo_data = read_topo(topo_path)
         self.topo_keys = get_topo_keys(self.topo_data)
         self.topo_key = topo_key
+        self.output_path = output_path
 
     @property
     def csv_path(self) -> Path:
@@ -40,6 +50,19 @@ class TopoJoin:
         return self.csv_path.name
 
     @property
+    def csv_key(self) -> str:
+        return self._csv_key
+
+    @csv_key.setter
+    def csv_key(self, new_csv_key: str) -> None:
+        if new_csv_key in self.csv_keys:
+            self._csv_key = new_csv_key
+        else:
+            raise Exception(
+                f"Provided csv_key '{new_csv_key}' is not among CSV keys: {self.csv_keys}."
+            )
+
+    @property
     def topo_path(self) -> Path:
         return self._topo_path
 
@@ -56,23 +79,10 @@ class TopoJoin:
         return self.topo_path.name
 
     @property
-    def csv_key(self) -> str:
-        return self._csv_key
-
-    @csv_key.setter
-    def csv_key(self, new_csv_key: str) -> None:
-        if new_csv_key in self.csv_keys:
-            self._csv_key = new_csv_key
-        else:
-            raise Exception(
-                f"Provided csv_key '{new_csv_key}' is not among CSV keys: {self.csv_keys}."
-            )
-
-    @property
     def topo_key(self) -> str:
         return self._topo_key
 
-    @csv_key.setter
+    @topo_key.setter
     def topo_key(self, new_topo_key: str) -> None:
         if new_topo_key in self.topo_keys:
             self._topo_key = new_topo_key
@@ -80,3 +90,23 @@ class TopoJoin:
             raise Exception(
                 f"Provided topo_key '{new_topo_key}' is not among TopoJson keys: {self.topo_keys}."
             )
+
+    def join(self) -> None:
+        joined_topo_data = copy.deepcopy(self.topo_data)
+        csv_lookup_table = create_lookup_table(self.csv_data, self.csv_key)
+        objects = joined_topo_data["objects"]
+        first_key = list(objects.keys())[0]
+        features = objects[first_key]["geometries"]
+        for feature in features:
+            topo_props = feature["properties"]
+            topo_join_val = topo_props[self.topo_key]
+            csv_props = csv_lookup_table.get(topo_join_val)
+            if csv_props:
+                new_props = {**topo_props, **csv_props}
+            else:
+                clean_csv_keys = copy.deepcopy(self.csv_keys)
+                clean_csv_keys.remove(self.csv_key)
+                null_fields = {x: None for x in clean_csv_keys}
+                new_props = {**topo_props, **null_fields}
+            feature["properties"] = new_props
+        write_topo(joined_topo_data, self.output_path)

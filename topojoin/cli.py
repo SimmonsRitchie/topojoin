@@ -1,14 +1,14 @@
 """Console script for topojoin."""
 import os
 import sys
+from pathlib import Path
 import click
-
 from topojoin.topojoin import TopoJoin
 
 
 @click.command()
-@click.argument("csv_path", type=click.STRING)
-@click.argument("topo_path", type=click.STRING)
+@click.argument("csv_path", type=click.Path())
+@click.argument("topo_path", type=click.Path())
 @click.option(
     "csv_key",
     "--csvkey",
@@ -24,6 +24,15 @@ from topojoin.topojoin import TopoJoin
     "-tk",
     default="fips",
     type=click.STRING,
+    help="Key in CSV file that will be used to join with CSV file",
+    show_default=True,
+)
+@click.option(
+    "output_path",
+    "--output_path",
+    "-o",
+    default=Path(os.getcwd()) / "joined.json",
+    type=click.Path(),
     help="Key in CSV file that will be used to join with CSV file",
     show_default=True,
 )

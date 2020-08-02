@@ -8,8 +8,9 @@ def test_topojson_init(csv_path, topo_path):
     topojoin_obj = TopoJoin(csv_path, topo_path, csv_key="fips", topo_key="GEOID")
     assert isinstance(topojoin_obj.csv_path, Path)
     assert isinstance(topojoin_obj.topo_path, Path)
-    assert isinstance(topojoin_obj.csv_key, str)
-    assert isinstance(topojoin_obj.topo_key, str)
+    assert topojoin_obj.csv_key == "fips"
+    assert topojoin_obj.topo_key == "GEOID"
+    print(topojoin_obj.topo_key)
 
 
 def test_error_when_csv_key_not_present(csv_path, topo_path):
@@ -35,3 +36,15 @@ def test_error_when_topo_key_changed_to_invalid(csv_path, topo_path):
     with pytest.raises(Exception):
         topojoin_obj = TopoJoin(csv_path, topo_path, csv_key="fips", topo_key="GEOID")
         topojoin_obj.csv_key = "ducks"
+
+
+def test_file_created_after_join(csv_path, topo_path, tmp_path):
+    output_path = tmp_path / "test_joined.json"
+    print(output_path)
+    topojoin_obj = TopoJoin(
+        csv_path, topo_path, csv_key="fips", topo_key="GEOID", output_path=output_path
+    )
+    topojoin_obj.join()
+    file_list = tmp_path.glob("**/*")
+    file_list = [x for x in file_list if x.is_file()]
+    assert len(file_list) == 1
