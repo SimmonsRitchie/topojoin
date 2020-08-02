@@ -64,17 +64,34 @@ def test_file_created_after_join(topo_path, csv_path, tmp_path):
     assert len(file_list) == 1
 
 
-def test_null_fields_after_join(topo_path, csv_path_non_matching, tmp_path):
+def test_null_fields_after_join(topo_path, csv_path_non_matching):
     """ Test that Allegheny county feature in joined data has several null properties because there was no Allegheny
     County row in provided CSV data."""
     topojoin_obj = TopoJoin(
         topo_path, csv_path_non_matching, topo_key="GEOID", csv_key="fips",
     )
-    result = topojoin_obj.join()
-    features = get_topo_features(result)
+    topo_data = topojoin_obj.join()
+    features = get_topo_features(topo_data)
     allegheny_county_props = [
         feature["properties"]
         for feature in features
         if feature["properties"]["NAME"].lower() == "allegheny"
     ][0]
     assert allegheny_county_props["population"] is None
+
+
+def test_filter_csv_props_when_joining(topo_path, csv_path):
+    topojoin_obj = TopoJoin(
+        topo_path, csv_path, topo_key="GEOID", csv_key="fips",
+    )
+    topo_data = topojoin_obj.join(selected_csv_props=["population"])
+    first_feature = get_topo_features(topo_data)[0]
+    assert not first_feature["properties"].get("name")
+
+
+def test_failure_when_invalid_filter_csv_prop_provided(topo_path, csv_path):
+    with pytest.raises(Exception):
+        topojoin_obj = TopoJoin(
+            topo_path, csv_path, topo_key="GEOID", csv_key="fips",
+        )
+        topojoin_obj.join(selected_csv_props=["population", "duck"])
