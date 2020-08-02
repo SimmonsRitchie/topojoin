@@ -24,7 +24,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "3.7"
+python = ">=3.7"
 click = "*"
 importlib_metadata = "^1.7.0"
 
