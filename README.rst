@@ -15,7 +15,8 @@ TopoJoin
 
 
 
-A lightweight utility to left join topojson data with CSV data.
+A lightweight utility to join CSV data to a topojson file. Produces a new topojson file with CSV properties added to
+the properties of each feature.
 
 * Free software: MIT
 * Documentation: https://topojoin.readthedocs.io.
@@ -111,6 +112,11 @@ For example:
 
     topojoin -tk GEOID -ck fips -o "mydir/my-custom-filename.json" example.json example.csv
 
+
+TO DO
+-----
+- Prefix CSV keys if key name is already present in topojson props.
+- Raise exception or prompt if CSV file has duplicate values in column specified by csv_key.
 
 Alternatives
 ------------
