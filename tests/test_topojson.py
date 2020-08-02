@@ -1,4 +1,6 @@
 import pytest
+
+from topojoin.helper import get_topo_features
 from topojoin.topojoin import TopoJoin
 from pathlib import Path
 
@@ -40,11 +42,24 @@ def test_error_when_topo_key_changed_to_invalid(csv_path, topo_path):
 
 def test_file_created_after_join(csv_path, topo_path, tmp_path):
     output_path = tmp_path / "test_joined.json"
-    print(output_path)
-    topojoin_obj = TopoJoin(
-        csv_path, topo_path, csv_key="fips", topo_key="GEOID", output_path=output_path
-    )
-    topojoin_obj.join()
+    topojoin_obj = TopoJoin(csv_path, topo_path, csv_key="fips", topo_key="GEOID")
+    topojoin_obj.join(output_path)
     file_list = tmp_path.glob("**/*")
     file_list = [x for x in file_list if x.is_file()]
     assert len(file_list) == 1
+
+
+def test_null_fields_after_join(csv_path_non_matching, topo_path, tmp_path):
+    """ Test that Allegheny county feature in joined data has several null properties because there was no Allegheny
+    County row in provided CSV data."""
+    topojoin_obj = TopoJoin(
+        csv_path_non_matching, topo_path, csv_key="fips", topo_key="GEOID",
+    )
+    result = topojoin_obj.join()
+    features = get_topo_features(result)
+    allegheny_county_props = [
+        feature["properties"]
+        for feature in features
+        if feature["properties"]["NAME"].lower() == "allegheny"
+    ][0]
+    assert allegheny_county_props["population"] is None
