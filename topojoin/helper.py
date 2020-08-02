@@ -49,7 +49,7 @@ def get_topo_features(topo_data: Dict) -> List:
     return objects[first_key]["geometries"]
 
 
-def get_topo_keys(topo_data: Dict) -> List[str]:
+def get_topo_props(topo_data: Dict) -> List[str]:
     """
     Gets a list of properties in the first feature of topojson data
 

@@ -84,7 +84,7 @@ def test_filter_csv_props_when_joining(topo_path, csv_path):
     topojoin_obj = TopoJoin(
         topo_path, csv_path, topo_key="GEOID", csv_key="fips",
     )
-    topo_data = topojoin_obj.join(selected_csv_props=["population"])
+    topo_data = topojoin_obj.join(csv_props=["population"])
     first_feature = get_topo_features(topo_data)[0]
     assert not first_feature["properties"].get("name")
 
@@ -94,4 +94,4 @@ def test_failure_when_invalid_filter_csv_prop_provided(topo_path, csv_path):
         topojoin_obj = TopoJoin(
             topo_path, csv_path, topo_key="GEOID", csv_key="fips",
         )
-        topojoin_obj.join(selected_csv_props=["population", "duck"])
+        topojoin_obj.join(csv_props=["population", "duck"])
