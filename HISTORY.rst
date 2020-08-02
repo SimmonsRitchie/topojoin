@@ -5,6 +5,7 @@ History
 0.2.2 (2020-08-02)
 ------------------
 
+* New feature: filter CSV properties.
 * Tweaks to readme.
 
 0.2.1 (2020-08-02)
