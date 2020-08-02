@@ -39,6 +39,7 @@ pytest = "*"
 sphinx = "*"
 tox = "*"
 yapf = "*"
+bump2version = "^1.0.0"
 
 [tool.poetry.scripts]
 topojoin = 'topojoin.cli:main'
