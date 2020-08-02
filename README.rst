@@ -15,13 +15,30 @@ TopoJoin
 
 
 
-Tool to easily join CSV data to topojson data.
+A lightweight utility to left join topojson data with CSV data.
 
 * Free software: MIT
 * Documentation: https://topojoin.readthedocs.io.
 
-Usage
------
+Install
+----------
+
+::
+
+    pip install topojoin
 
 
+Basic usage
+-----------
 
+Command line
+============
+
+::
+
+   topojoin ny
+
+   >> Initializing getpop
+   >> Selected states: ['ny']
+   >> Processing: New York
+   >> getpop complete
