@@ -69,8 +69,8 @@ If you prefer, you can also import and call TopoJoin from a python script:
 
     from topojoin.topojoin import TopoJoin
 
-    topo_obj = TopoJoin("./example.json", "./example.csv", topo_key="GEOID", csv_key="fips")
-    topojson_data = topo_obj.join()
+    tj = TopoJoin("./example.json", "./example.csv", topo_key="GEOID", csv_key="fips")
+    topojson_data = tj.join()
 
 
 Or, to write to a file:
@@ -79,8 +79,8 @@ Or, to write to a file:
 
     from topojoin.topojoin import TopoJoin
 
-    topo_obj = TopoJoin("./example.json", "./example.csv", topo_key="GEOID", csv_key="fips")
-    topo_obj.join("joined.json")
+    tj = TopoJoin("./example.json", "./example.csv", topo_key="GEOID", csv_key="fips")
+    tj.join("joined.json")
 
 
 Advanced usage
