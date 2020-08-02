@@ -40,6 +40,15 @@ def write_topo(topo_data, output_path) -> None:
         json.dump(topo_data, outfile)
 
 
+def get_topo_features(topo_data: Dict) -> List:
+    """
+    Gets a list of features stored on a topojson structured dictionary.
+    """
+    objects = topo_data["objects"]
+    first_key = list(objects.keys())[0]
+    return objects[first_key]["geometries"]
+
+
 def get_topo_keys(topo_data: Dict) -> List[str]:
     """
     Gets a list of properties in the first feature of topojson data
@@ -50,10 +59,9 @@ def get_topo_keys(topo_data: Dict) -> List[str]:
     Returns:
         List[str]: Properties in the first feature of topojson data
     """
-    objects = topo_data["objects"]
-    first_key = list(objects.keys())[0]
-    properties = objects[first_key]["geometries"][0]["properties"]
-    return list(properties)
+    features = get_topo_features(topo_data)
+    property_keys_of_first_feature = features[0]["properties"]
+    return list(property_keys_of_first_feature)
 
 
 def create_lookup_table(
