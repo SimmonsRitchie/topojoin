@@ -2,4 +2,4 @@
 
 __author__ = "DSR"
 __email__ = "info@simmonsritchie.com"
-__version__ = "__version__ = '0.2.1'"
+__version__ = "__version__ = '0.2.2'"
