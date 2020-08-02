@@ -29,20 +29,17 @@ from typing import Union, Dict, Any
     show_default=True,
 )
 @click.option(
-    "output_path",
-    "--output_path",
-    "-o",
-    # callback=lambda ctx, param, value: Path(os.getcwd()) / value,
-    default=Path(os.getcwd()) / "joined.json",
-    type=click.Path(resolve_path=True),
-    help="Key in CSV file that will be used to join with CSV file",
-    show_default=True,
+    "csv_props",
+    "--csv_props",
+    "-cp",
+    type=click.STRING,
+    help="Comma separated list of fields in CSV file to merge to each topojson feature "
+         "(eg: name,population,net_income). Defaults to including all fields.",
 )
 @click.option(
     "output_path",
     "--output_path",
     "-o",
-    # callback=lambda ctx, param, value: Path(os.getcwd()) / value,
     default=Path(os.getcwd()) / "joined.json",
     type=click.Path(resolve_path=True),
     help="Key in CSV file that will be used to join with CSV file",
@@ -61,6 +58,7 @@ def main(
     quiet: bool,
     csv_path: Union[str, Path],
     topo_path: Union[str, Path],
+    csv_props: str,
     output_path: Union[str, Path],
     **kwargs,
 ) -> Dict[str, Any]:
@@ -73,16 +71,22 @@ def main(
     if quiet:
         f = open(os.devnull, "w")
         sys.stdout = f
-    topojoin_obj = TopoJoin(topo_path, csv_path, **kwargs)
+    tj = TopoJoin(topo_path, csv_path, **kwargs)
     click.echo(
-        f"Joining {topojoin_obj.csv_filename} to {topojoin_obj.topo_filename})..."
+        f"Joining {tj.csv_filename} to {tj.topo_filename})..."
     )
     click.echo(
-        f"CSV key '{topojoin_obj.csv_key}' will be joined with topojson key '{topojoin_obj.topo_key}'"
+        f"CSV key '{tj.csv_key}' will be joined with topojson key '{tj.topo_key}'"
     )
-    output_path = Path(output_path)
-    topo_data = topojoin_obj.join(output_path)
-    click.echo(f"Joined data saved to: {output_path}")
+    clean_output_path = Path(output_path)
+    if csv_props:
+        csv_props = [x.strip() for x in csv_props.split(",")]
+        if not set(csv_props).issubset(set(tj.all_csv_props)):
+            click.echo(f"Error: One or more fields in csv_props is not among available CSV properties: "
+                       f"{', '.join(tj.all_csv_props)}. Please enter valid fields.")
+            exit()
+    topo_data = tj.join(clean_output_path, csv_props)
+    click.echo(f"Joined data saved to: {clean_output_path}")
 
     return topo_data
 
