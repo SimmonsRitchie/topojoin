@@ -110,3 +110,9 @@ For example:
 ::
 
     topojoin -tk GEOID -ck fips -o "mydir/my-custom-filename.json" example.json example.csv
+
+
+Alternatives
+------------
+
+- `py-geojoin <https://github.com/shawnbot/py-geojoin>`__
