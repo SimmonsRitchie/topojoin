@@ -45,7 +45,7 @@ from topojoin.topojoin import TopoJoin
     help="Disables stdout during program run",
 )
 @click.version_option()
-def main(quiet: bool, csv_path, topo_path, **kwargs) -> None:
+def main(quiet: bool, csv_path, topo_path, output_path, **kwargs) -> None:
     """
     CLI for topojoin.
 
@@ -68,8 +68,8 @@ def main(quiet: bool, csv_path, topo_path, **kwargs) -> None:
     click.echo(
         f"CSV key '{topojoin_obj.csv_key}' will be joined with topojson key '{topojoin_obj.topo_key}'"
     )
-    topojoin_obj.join()
-    click.echo(f"File saved as: {topojoin_obj.output_path}")
+    topojoin_obj.join(output_path)
+    click.echo(f"File saved as: {output_path}")
 
     return 0
 

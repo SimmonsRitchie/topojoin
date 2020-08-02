@@ -1,7 +1,7 @@
 """Main module."""
 import copy
 from pathlib import Path
-from typing import List, Union
+from typing import List, Union, Dict, Any
 import operator
 from topojoin.helper import (
     read_csv,
@@ -9,6 +9,7 @@ from topojoin.helper import (
     get_topo_keys,
     create_lookup_table,
     write_topo,
+    get_topo_features,
 )
 import os
 
@@ -21,7 +22,6 @@ class TopoJoin:
         *,
         csv_key: str,
         topo_key: str,
-        output_path: Union[str, Path] = Path(os.getcwd()) / "joined.json",
     ):
         self.csv_path = csv_path
         self.csv_data = read_csv(csv_path)
@@ -31,7 +31,6 @@ class TopoJoin:
         self.topo_data = read_topo(topo_path)
         self.topo_keys = get_topo_keys(self.topo_data)
         self.topo_key = topo_key
-        self.output_path = output_path
 
     @property
     def csv_path(self) -> Path:
@@ -91,12 +90,22 @@ class TopoJoin:
                 f"Provided topo_key '{new_topo_key}' is not among TopoJson keys: {self.topo_keys}."
             )
 
-    def join(self) -> None:
+    def join(self, output_path: Union[str, Path] = None,) -> Dict[str, Any]:
+        """
+        Returns a topojson-structured Dict with CSV data appended onto existing topojson properties based on specified
+        keys.
+
+        Args:
+            output_path( Union[str, Path]): Writes joined topojson data to specified path. Defaults to None. No file will be
+                saved.
+
+        Returns:
+            A dict representing topojson structured data. Fields from CSV are added to existing topojson properties.
+
+        """
         joined_topo_data = copy.deepcopy(self.topo_data)
         csv_lookup_table = create_lookup_table(self.csv_data, self.csv_key)
-        objects = joined_topo_data["objects"]
-        first_key = list(objects.keys())[0]
-        features = objects[first_key]["geometries"]
+        features = get_topo_features(joined_topo_data)
         for feature in features:
             topo_props = feature["properties"]
             topo_join_val = topo_props[self.topo_key]
@@ -109,4 +118,6 @@ class TopoJoin:
                 null_fields = {x: None for x in clean_csv_keys}
                 new_props = {**topo_props, **null_fields}
             feature["properties"] = new_props
-        write_topo(joined_topo_data, self.output_path)
+        if output_path:
+            write_topo(joined_topo_data, output_path)
+        return joined_topo_data
