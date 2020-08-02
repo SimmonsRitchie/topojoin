@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 import click
 from topojoin.topojoin import TopoJoin
-from typing import Union
+from typing import Union, Dict, Any
 
 
 @click.command()
@@ -53,19 +53,12 @@ def main(
     topo_path: Union[str, Path],
     output_path: Union[str, Path],
     **kwargs,
-) -> None:
+) -> Dict[str, Any]:
     """
-    CLI for topojoin.
-
-    Args:
-        quiet (bool): Disables stdout during program run.
-        topo_path (Union[str, Path]): Path to topojson file
-        csv_path (Union[str, Path]): Path to CSV file
-        output_path (Union[str, Path]): Path to output file
-        kwargs (dict): Keyword arguments that will be passed to TopoJson.
+    A CLI utility that joins CSV data to a topojson file.
 
     Returns:
-        None
+        Dict[str, Any]: topojson data merged with CSV values.
     """
     if quiet:
         f = open(os.devnull, "w")
@@ -78,10 +71,10 @@ def main(
         f"CSV key '{topojoin_obj.csv_key}' will be joined with topojson key '{topojoin_obj.topo_key}'"
     )
     output_path = Path(output_path)
-    topojoin_obj.join(output_path)
+    topo_data = topojoin_obj.join(output_path)
     click.echo(f"Joined data saved to: {output_path}")
 
-    return 0
+    return topo_data
 
 
 if __name__ == "__main__":

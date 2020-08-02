@@ -68,6 +68,45 @@ If you prefer, you can also import and call topojson from a python script:
 
     from topojoin.topojoin import TopoJoin
 
-    topojoin_obj = TopoJoin("./example.json", "./example.", topo_key="GEOID", csv_key="fips")
-    result = topojoin_obj.join()
+    topo_obj = TopoJoin("./example.json", "./example.csv", topo_key="GEOID", csv_key="fips")
+    topojson_data = topo_obj.join()
 
+
+Or, to write to a file:
+
+::
+
+    from topojoin.topojoin import TopoJoin
+
+    topo_obj = TopoJoin("./example.json", "./example.csv", topo_key="GEOID", csv_key="fips")
+    topo_obj.join("joined.json")
+
+
+Advanced usage
+--------------
+
+Command line
+================
+
+topojoin's actions can be modified in a number of ways by passing optional arguments. Here are its available options:
+
+  -tk, --topokey TEXT     Key in CSV file that will be used to join with CSV
+                          file  [default: id]
+
+  -ck, --csvkey TEXT      Key in CSV file that will be used to join with
+                          topojson file  [default: id]
+
+  -o, --output_path PATH  Key in CSV file that will be used to join with CSV
+                          file  [default: /Volumes/Dan_T5/development/PythonPr
+                          ojects/utilities/2020/topojoin/topojoin/joined.json]
+
+  -q, --quiet             Disables stdout during program run
+  --version               Show the version and exit.
+  --help                  Show this message and exit.
+
+
+For example:
+
+::
+
+    topojoin -tk GEOID -ck fips -o "mydir/my-custom-filename.json" example.json example.csv

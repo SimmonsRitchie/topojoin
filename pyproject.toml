@@ -8,7 +8,7 @@ authors = ["DSR <info@simmonsritchie.com>"]
 readme = "README.rst"
 license =  "MIT"
 classifiers=[
-    'Development Status :: 2 - Pre-Alpha',
+    'Development Status :: 4 - Beta',
     'Intended Audience :: Developers',
     'License :: OSI Approved :: MIT License',
     'Natural Language :: English',
