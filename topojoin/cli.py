@@ -84,7 +84,7 @@ def main(
         if not set(csv_props).issubset(set(tj.all_csv_props)):
             click.echo(f"Error: One or more fields in csv_props is not among available CSV properties: "
                        f"{', '.join(tj.all_csv_props)}. Please enter valid fields.")
-            exit()
+            exit(code=1)
     topo_data = tj.join(clean_output_path, csv_props)
     click.echo(f"Joined data saved to: {clean_output_path}")
 
