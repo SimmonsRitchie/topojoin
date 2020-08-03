@@ -34,7 +34,7 @@ from typing import Union, Dict, Any
     "-cp",
     type=click.STRING,
     help="Comma separated list of fields in CSV file to merge to each topojson feature "
-         "(eg: name,population,net_income). Defaults to including all fields.",
+         "(eg: name,population,net_income). Defaults to including all fields in CSV file.",
 )
 @click.option(
     "output_path",
@@ -42,8 +42,7 @@ from typing import Union, Dict, Any
     "-o",
     default=Path(os.getcwd()) / "joined.json",
     type=click.Path(resolve_path=True),
-    help="Key in CSV file that will be used to join with CSV file",
-    show_default=True,
+    help="Output path of joined topojson file. Defaults to current working directory.",
 )
 @click.option(
     "quiet",
