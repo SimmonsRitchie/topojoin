@@ -21,7 +21,7 @@ def test_cli_basic(topo_path, csv_path, tmp_path):
     assert len(file_list) == 1
 
 
-def test_cli_filter_csv_fields(topo_path, csv_path, tmp_path):
+def test_cli_csv_props_option(topo_path, csv_path, tmp_path):
     output_path = tmp_path / "test_joined.json"
     runner = CliRunner()
     result = runner.invoke(
@@ -31,6 +31,17 @@ def test_cli_filter_csv_fields(topo_path, csv_path, tmp_path):
     topo_data = read_topo(output_path)
     first_feature = get_topo_features(topo_data)[0]
     assert not first_feature["properties"].get("name")
+
+
+def test_cli_fails_when_invalid_csv_prop_provided(topo_path, csv_path, tmp_path):
+    output_path = tmp_path / "test_joined.json"
+    runner = CliRunner()
+    result = runner.invoke(
+        cli.main,
+        ["-tk", "GEOID", "-ck", "fips", "-cp", "duck","-o", output_path, topo_path, csv_path],
+    )
+    # Exit code 1 indicates failure
+    assert result.exit_code == 1
 
 
 def test_cli_invalid_topo_path(csv_path):
