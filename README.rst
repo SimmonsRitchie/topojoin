@@ -97,13 +97,19 @@ TopoJoin's actions can be modified in a number of ways by passing optional argum
   -ck, --csvkey TEXT      Key in CSV file that will be used to join with
                           topojson file  [default: id]
 
-  -o, --output_path PATH  Key in CSV file that will be used to join with CSV
-                          file  [default: /Volumes/Dan_T5/development/PythonPr
-                          ojects/utilities/2020/topojoin/topojoin/joined.json]
+  -cp, --csv_props TEXT   Comma separated list of fields in CSV file to merge
+                          to each topojson feature (eg:
+                          name,population,net_income). Defaults to including
+                          all fields in CSV file.
+
+  -o, --output_path TEXT  Output path of joined topojson file. Defaults to
+                          current working directory.
 
   -q, --quiet             Disables stdout during program run
   --version               Show the version and exit.
   --help                  Show this message and exit.
+
+
 
 
 For example:
