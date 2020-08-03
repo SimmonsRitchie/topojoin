@@ -2,7 +2,13 @@
 History
 =======
 
-0.2.2 (2020-08-02)
+
+0.3.1 (2020-08-02)
+------------------
+
+* Tweaks/fixes to help and documentation.
+
+0.3.0 (2020-08-02)
 ------------------
 
 * New feature: filter CSV properties.
